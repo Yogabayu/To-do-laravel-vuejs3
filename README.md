@@ -1,4 +1,4 @@
-# laravel
+# Todo
 
 ## Project Setup
 
@@ -12,3 +12,8 @@ php artisan migrate:fresh --seed
 
 npm run dev dan php artisan serve
 ```
+
+
+## Postmant
+
+List postman di file dengan nama 'To-D0-fulstack-vue.postman_collection.json'
