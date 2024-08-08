@@ -7,7 +7,6 @@ import router from '@/router'
 import '@core-scss/template/index.scss'
 import '@layouts/styles/index.scss'
 import '@styles/styles.scss'
-import AOS from 'aos'
 import 'aos/dist/aos.css'
 import { createPinia } from 'pinia'
 import Swal from 'sweetalert2'
@@ -29,13 +28,6 @@ app.use(router)
 // Mount vue app
 app.mount('#app')
 
-AOS.init({
-  duration: 400,
-  easing: 'ease-in-out',
-  once: false,
-  mirror: true,
-  offset: 50,
-});
 
 // Define the showToast method
 const showToast = (icon, title, text) => {
@@ -61,8 +53,47 @@ const showToast = (icon, title, text) => {
 // Make showToast method globally available
 app.config.globalProperties.$showToast = showToast
 
-/** localhost */
-app.config.globalProperties.$userPhotoUrl = 'http://localhost:8000/user/photo/';
-/** development */
-/** production */
-// app.config.globalProperties.$userPhotoUrl = 'http://todo.yogabayuap.com/user/photo/';
+
+const showSuccess = (title, text) => {
+  Swal.fire({
+    icon: 'success',
+    title: title,
+    text: text,
+    showConfirmButton: false,
+    timer: 3000
+  })
+}
+
+// Make showSuccess method globally available
+app.config.globalProperties.$showSuccess = showSuccess
+const showWarning = (title, text) => {
+  Swal.fire({
+    icon: 'warning',
+    title: title,
+    text: text,
+    showConfirmButton: false,
+    timer: 3000
+  })
+}
+
+// Make showSuccess method globally available
+app.config.globalProperties.$showWarning = showWarning
+
+
+const showDelete = (title, text, onConfirm) => {
+  Swal.fire({
+    icon: 'warning',
+    title: title,
+    text: text,
+    showCancelButton: true,
+    confirmButtonText: 'Ya, Hapus',
+    cancelButtonText: 'batal',
+  }).then((result) => {
+    if (result.isConfirmed) {
+      onConfirm()
+    }
+  })
+}
+
+// Make showWarning method globally available
+app.config.globalProperties.$showDelete = showDelete

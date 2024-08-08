@@ -7,48 +7,47 @@
     </header>
 
     <div class="form-container">
-      <form>
+      <form @submit.prevent="submitForm">
         <div class="form-row">
           <div class="form-group">
             <label for="name">Nama</label>
-            <input type="text" id="name" v-model="name" placeholder="Nama" />
+            <input class="bordered" type="text" id="name" v-model="name" placeholder="Nama" required />
           </div>
           <div class="form-group">
             <label for="username">Username</label>
-            <input type="text" id="username" v-model="username" placeholder="Username" />
+            <input class="bordered" type="text" id="username" v-model="username" placeholder="Username" required />
           </div>
           <div class="form-group">
             <label for="email">Email</label>
-            <input type="email" id="email" v-model="email" placeholder="Email" />
+            <input class="bordered" type="email" id="email" v-model="email" placeholder="Email" required />
           </div>
         </div>
 
+        <div class="d-flex justify-center">
+          <v-btn density="compact" icon="mdi-magnify" @click.prevent="searchTodo"></v-btn>
+        </div>
+
         <div class="to-do-list">
-          <h2>To Do List</h2>
+          <div class="spare-between">
+            <h2 class="mb-3">To Do List</h2>
+            <v-btn prepend-icon="mdi-plus" @click.prevent="addTodo" variant="tonal" color="error">
+              Tambah To DO
+            </v-btn>
+          </div>
           <div class="to-do-item" v-for="(todo, index) in todos" :key="index">
-            <div class="form-group">
-              <label for="email">{{ todo.title }}</label>
-              <input type="email" id="email" placeholder="contoh: perbaikan xxx" />
+            <div class="form-group title-input">
+              <label for="description">Description</label>
+              <input class="bordered" v-model="todo.description" type="text" id="todo-description"
+                placeholder="contoh: perbaikan xxx" />
             </div>
-            <div class="form-group">
-              <label for="email">Kategori</label>
-              <div class="category-dropdown">
-                <select v-model="todo.category">
-                  <option v-for="category in categories" :value="category">
-                    {{ category }}
-                  </option>
-                </select>
-                <i class="fas fa-chevron-down"></i>
-              </div>
+            <div class="form-group category-dropdown">
+              <label for="category">Category</label>
+              <v-select :items="categories" v-model="todo.category_id"></v-select>
             </div>
-            <div class="form-group">
-              <v-btn prepend-icon="mdi-delete" class="delete-btn" @click.prevent="removeTodo(index)" color="error">
-              </v-btn>
+            <div class="mt-4">
+              <v-btn density="compact" icon="mdi-delete" @click.prevent="removeTodo(todo.id)" color="error"></v-btn>
             </div>
           </div>
-          <button class="add-btn" @click.prevent="addTodo">
-            <i class="fas fa-plus"></i> Tambah To Do
-          </button>
         </div>
 
         <button type="submit" class="submit-btn">
@@ -60,35 +59,111 @@
 </template>
 
 <script>
+import mainURL from '@/axios';
+
 export default {
-  name: 'App',
   data() {
     return {
-      name: '',
-      username: '',
-      email: '',
-      todos: [
-        { title: 'Perbaikan api master', category: 'To Do' },
-        { title: 'Perbaikan api master', category: 'To Do' },
-        { title: 'Perbaikan api master', category: 'To Do' },
-      ],
-      categories: ['To Do', 'In Progress', 'Done'],
+      id: null,
+      name: "",
+      username: "",
+      email: "",
+      todos: [],
+      categories: [],
     };
   },
+
   methods: {
+    async searchTodo() {
+      try {
+        const formData = {
+          name: this.name,
+          username: this.username,
+          email: this.email,
+        };
+        const response = await mainURL.post('/gettodos', formData);
+        if (response.status == 200) {
+          this.name = response.data.data.name;
+          this.username = response.data.data.username;
+          this.email = response.data.data.email;
+          this.todos = response.data.data.tasks;
+        } else {
+          this.$showToast('error', 'Something went wrong', error.message);
+        }
+      } catch (error) {
+        this.$showToast('error', 'Something went wrong', error.message);
+      }
+    },
     addTodo() {
-      this.todos.push({ title: '', category: 'To Do' });
+      this.todos.push({ description: "", category_id: null });
     },
     removeTodo(index) {
       this.todos.splice(index, 1);
     },
+    async submitForm() {
+      try {
+        const formData = {
+          name: this.name,
+          username: this.username,
+          email: this.email,
+          todos: this.todos,
+        };
+        // Send the data to the server
+        await mainURL.post('/add', formData);
+        this.$showSuccess('Data created successfully', 'The data has been saved.');
+        await this.searchTodo();
+      } catch (error) {
+        this.$showToast('error', 'Something went wrong', error.message);
+      }
+    },
+
+    async getCategories() {
+      try {
+        const response = await mainURL.get('/categories');
+        this.categories = response.data.data.map((category) => ({
+          'value': category.id,
+          'title': category.name
+        }));
+      } catch (error) {
+        this.$showToast('error', 'Something went wrong', error.message);
+      }
+    },
+
+    async removeTodo(id) {
+      try {
+        this.$showDelete(
+          'Apakah anda yakin?',
+          'Todo yang dihapus tidak dapat dikembalikan',
+          async () => {
+            await mainURL.delete(`/delete/${id}`);
+            this.$showSuccess('Data deleted successfully', 'The todo has been deleted.');
+            await this.searchTodo();
+          }
+        );
+      } catch (error) {
+        this.$showToast('error', 'Something went wrong', error.message);
+      }
+    }
+
+  },
+  mounted() {
+    this.getCategories();
   },
 };
 </script>
 
 <style>
+.spare-between {
+  display: flex;
+  justify-content: space-between;
+}
+
+.bordered {
+  border: 1px solid #ccc;
+}
+
 #app {
-  font-family: 'Avenir', Helvetica, Arial, sans-serif;
+  font-family: "Avenir", Helvetica, Arial, sans-serif;
   -webkit-font-smoothing: antialiased;
   -moz-osx-font-smoothing: grayscale;
   text-align: center;
@@ -128,7 +203,6 @@ form {
 }
 
 .form-group {
-  flex: 1;
   margin-right: 10px;
 }
 
@@ -145,7 +219,6 @@ label {
 input {
   width: 100%;
   padding: 10px;
-  border: 1px solid #ccc;
   border-radius: 5px;
 }
 
@@ -168,37 +241,22 @@ input {
   margin-bottom: 10px;
 }
 
-.to-do-item input {
+.title-input {
   flex-grow: 1;
   margin-right: 10px;
 }
 
+.category-dropdown {
+  flex-grow: 0.5;
+  margin-right: 10px;
+}
+
+.delete-btn {
+  flex-grow: 0.2;
+}
+
 .actions {
   display: flex;
-}
-
-.category-btn,
-.delete-btn {
-  background-color: #e41523;
-  color: white;
-  border: none;
-  padding: 5px 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  margin-left: 5px;
-}
-
-.add-btn {
-  display: block;
-  width: 100%;
-  background-color: #e41523;
-  color: white;
-  border: none;
-  padding: 10px;
-  border-radius: 5px;
-  cursor: pointer;
-  font-size: 16px;
-  margin-top: 10px;
 }
 
 .category-dropdown {

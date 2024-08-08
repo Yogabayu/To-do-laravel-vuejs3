@@ -2,6 +2,7 @@
 
 use App\Http\Controllers\Admin\OfficeController;
 use App\Http\Controllers\Auth\AuthController;
+use App\Http\Controllers\TodoController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,7 +17,8 @@ use Illuminate\Support\Facades\Route;
 */
 
 Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
-    Route::post('login', [AuthController::class, 'login'])->name('login');
-
-    Route::middleware('auth:api')->group(function () {});
+    Route::get('categories', [TodoController::class, 'getCategories'])->name('categories');
+    Route::post('add', [TodoController::class, 'add'])->name('add');
+    Route::post('gettodos', [TodoController::class, 'getTodos'])->name('gettodos');
+    Route::delete('delete/{id}', [TodoController::class, 'deleteTodo'])->name('deleteTodo');
 });

@@ -17,20 +17,12 @@ class User extends Authenticatable
      * @var array
      */
     protected $fillable = [
-        'nik',
         'name',
+        'username',
         'email',
-        'password',
-        'telegram_username',
-        'telegram_chatid',
-        'isActive',
-        'position_id',
-        'dirut_id',
-        'dir_id',
-        'bm_id',
-        'asmen_id',
-        'brm_id',
-        'ca_id',
+        'created_by',
+        'updated_by',
+        'deleted_by',
     ];
 
     /**
@@ -53,58 +45,31 @@ class User extends Authenticatable
     ];
 
     /**
-     * Get the position associated with the user.
+     * Get the user who created the current user.
      */
-    public function position()
+    public function createdBy()
     {
-        return $this->belongsTo(Position::class, 'position_id', 'id');
+        return $this->belongsTo(User::class, 'created_by');
     }
 
     /**
-     * Get the director associated with the user.
+     * Get the user who updated the current user.
      */
-    public function director()
+    public function updatedBy()
     {
-        return $this->belongsTo(User::class, 'dir_id');
+        return $this->belongsTo(User::class, 'updated_by');
     }
 
     /**
-     * Get the director general associated with the user.
+     * Get the user who deleted the current user.
      */
-    public function directorGeneral()
+    public function deletedBy()
     {
-        return $this->belongsTo(User::class, 'dirut_id');
+        return $this->belongsTo(User::class, 'deleted_by');
     }
 
-    /**
-     * Get the branch manager associated with the user.
-     */
-    public function branchManager()
+    public function tasks()
     {
-        return $this->belongsTo(User::class, 'bm_id');
-    }
-
-    /**
-     * Get the assistant manager associated with the user.
-     */
-    public function assistantManager()
-    {
-        return $this->belongsTo(User::class, 'asmen_id');
-    }
-
-    /**
-     * Get the branch relation manager associated with the user.
-     */
-    public function branchRelationManager()
-    {
-        return $this->belongsTo(User::class, 'brm_id');
-    }
-
-    /**
-     * Get the client advisor associated with the user.
-     */
-    public function clientAdvisor()
-    {
-        return $this->belongsTo(User::class, 'ca_id');
+        return $this->hasMany(Task::class);
     }
 }

@@ -1,25 +1,6 @@
 <template>
   <v-app :theme="theme">
     <router-view />
-    <!-- <AppHeader @toggle-drawer="toggleDrawer" @toggle-theme="toggleTheme" :theme="theme" />
-    <AppNavigator v-model:drawer="drawer" />
-    <v-main>
-      <v-container fluid class="shop-beyond-boundaries-section py-12">
-        <v-row justify="center">
-          <v-col cols="12">
-            <v-img src="https://picsum.photos/1600/900" alt="Let's Shop Beyond Boundaries" height="300"
-              class="custom-rounded" cover>
-              <v-row align="center" justify="center" class="fill-height">
-                <v-col cols="12" class="text-center">
-                  <h2 class="text-h2 font-weight-bold text-white">"Let's Shop Beyond Boundaries"</h2>
-                </v-col>
-              </v-row>
-            </v-img>
-          </v-col>
-        </v-row>
-      </v-container>
-    </v-main> -->
-    <!-- <AppFooter /> -->
   </v-app>
 </template>
 
