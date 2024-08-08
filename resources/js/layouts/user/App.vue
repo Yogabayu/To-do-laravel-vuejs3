@@ -1,10 +1,9 @@
 <template>
   <v-app :theme="theme">
-    <AppHeader @toggle-drawer="toggleDrawer" @toggle-theme="toggleTheme" :theme="theme" />
+    <router-view />
+    <!-- <AppHeader @toggle-drawer="toggleDrawer" @toggle-theme="toggleTheme" :theme="theme" />
     <AppNavigator v-model:drawer="drawer" />
     <v-main>
-      <router-view />
-      <!-- Shop Beyond Boundaries Section -->
       <v-container fluid class="shop-beyond-boundaries-section py-12">
         <v-row justify="center">
           <v-col cols="12">
@@ -19,16 +18,13 @@
           </v-col>
         </v-row>
       </v-container>
-    </v-main>
-    <AppFooter />
+    </v-main> -->
+    <!-- <AppFooter /> -->
   </v-app>
 </template>
 
 <script setup>
 import { ref } from 'vue';
-import AppFooter from './AppFooter.vue';
-import AppHeader from './AppHeader.vue';
-import AppNavigator from './AppNavigator.vue';
 
 const theme = ref('light');
 const drawer = ref(false);

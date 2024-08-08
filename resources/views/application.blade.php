@@ -5,7 +5,7 @@
   <meta charset="UTF-8" />
   <link rel="icon" href="{{ asset('faviconme.ico') }}" />
   <meta name="viewport" content="width=device-width, initial-scale=1.0" />
-  <title>Eshoop</title>
+  <title>Todo-list</title>
   <link rel="stylesheet" type="text/css" href="{{ asset('loader.css') }}" />
   @vite(['resources/js/main.js'])
 </head>

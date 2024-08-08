@@ -6,71 +6,19 @@ const router = createRouter({
     {
       path: "/",
       redirect: (to) => {
-        const userToken = localStorage.getItem("userToken");
-        // return userToken ? "/dashboard" : "/login";
         return "/dashboard";
       },
     },
     {
-      path: "/dashboard",
-      component: () => import("../layouts/guest/App.vue"),
+      path: "/login",
+      component: () => import("../layouts/blank.vue"),
       children: [
         {
           path: "",
-          component: () => import("../pages/guest/dashboard.vue"),
+          component: () => import("../pages/auth/login.vue"),
         },
       ],
     },
-    {
-      path: "/service",
-      component: () => import("../layouts/guest/App.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/guest/service.vue"),
-        },
-      ],
-    },
-    {
-      path: "/shop",
-      component: () => import("../layouts/guest/App.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/guest/shop.vue"),
-        },
-      ],
-    },
-    {
-      path: "/detail",
-      component: () => import("../layouts/guest/App.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/guest/detail.vue"),
-        },
-      ],
-    },
-    {
-      path: "/cart",
-      component: () => import("../layouts/guest/App.vue"),
-      children: [
-        {
-          path: "",
-          component: () => import("../pages/guest/cart.vue"),
-        },
-      ],
-    },
-    // {
-    //   path: "/login",
-    //   component: () => import("../layouts/blank.vue"),
-    //   children: [
-    //     {
-    //       path: "",
-    //       component: () => import("../pages/auth/login.vue"),
-    //     },
-    //   ],
-    // },
     // {
     //   path: "/:pathMatch(.*)*",
     //   component: () => import("../layouts/blank.vue"),
@@ -81,6 +29,17 @@ const router = createRouter({
     //     },
     //   ],
     // },
+
+    {
+      path: "/dashboard",
+      component: () => import("../layouts/user/App.vue"),
+      children: [
+        {
+          path: "",
+          component: () => import("../pages/user/dashboard.vue"),
+        },
+      ],
+    },
     {
       path: "/unauthorized",
       component: () => import("../layouts/blank.vue"),
@@ -110,20 +69,6 @@ const router = createRouter({
     //   ],
     // },    
 
-    // //user
-    // {
-    //   path: "/user-dashboard",
-    //   component: () => import("../layouts/user/default.vue"),
-    //   children: [
-    //     {
-    //       path: "",
-    //       component: () => import("../pages/user/dashboard.vue"),
-    //       beforeEnter: (to, from, next) => {
-    //         checkLogin(next);
-    //       },
-    //     },
-    //   ],
-    // },    
   ],
 });
 

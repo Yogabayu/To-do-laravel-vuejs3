@@ -18,18 +18,5 @@ use Illuminate\Support\Facades\Route;
 Route::group(['namespace' => 'Api', 'prefix' => 'v1'], function () {
     Route::post('login', [AuthController::class, 'login'])->name('login');
 
-    Route::middleware('auth:api')->group(function () {
-        // // route admin
-        Route::post('logout', [AuthController::class, 'destroy'])->name('logout');
-
-        //office
-        Route::get('office', [OfficeController::class, 'index']);
-        Route::post('office', [OfficeController::class, 'store']);
-        Route::put('office/{id}', [OfficeController::class, 'update']);
-        Route::delete('office/{id}', [OfficeController::class, 'destroy']);
-
-        //////// Route User \\\\\\\\\
-        Route::group(['prefix' => 'user'], function () {
-        });
-    });
+    Route::middleware('auth:api')->group(function () {});
 });

@@ -62,7 +62,7 @@ const showToast = (icon, title, text) => {
 app.config.globalProperties.$showToast = showToast
 
 /** localhost */
-// app.config.globalProperties.$userPhotoUrl = 'http://localhost:8000/user/photo/';
+app.config.globalProperties.$userPhotoUrl = 'http://localhost:8000/user/photo/';
 /** development */
 /** production */
-app.config.globalProperties.$userPhotoUrl = 'http://shop.yogabayuap.com/user/photo/';
+// app.config.globalProperties.$userPhotoUrl = 'http://todo.yogabayuap.com/user/photo/';
